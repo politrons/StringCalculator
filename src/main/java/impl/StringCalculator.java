@@ -4,10 +4,8 @@ import impl.exceptions.NegativeNumberException;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -15,6 +13,10 @@ import java.util.stream.Stream;
  * Created by pabloperezgarcia on 22/8/15.
  */
 public class StringCalculator {
+
+    public static final String MULTI_DELIMITER = "\\[(.*?)\\]";
+
+    public static final String SINGLE_DELIMITER = "^\\/\\/(.*?)\\n";
 
     private String defaultSplit = "\\,|\\n";
 
@@ -60,7 +62,7 @@ public class StringCalculator {
         StringBuilder customSplit = new StringBuilder();
         boolean delimitersFound = false;
         String separation = "";
-        LinkedList<String> delimitersPatterns = new LinkedList<>(Arrays.asList("\\[(.*?)\\]", "^\\/\\/(.*?)\\n"));
+        LinkedList<String> delimitersPatterns = new LinkedList<>(Arrays.asList(MULTI_DELIMITER, SINGLE_DELIMITER));
         for (String delimiterPattern : delimitersPatterns) {
             Matcher matcher = Pattern.compile(delimiterPattern).matcher(number);
             while (matcher.find()) {
