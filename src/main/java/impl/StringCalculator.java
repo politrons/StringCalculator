@@ -20,7 +20,7 @@ public class StringCalculator {
 
     private String defaultPattern = "^(?:\\/\\/(.)*\\n(-?\\d+(?:(?:,|\\n)-?\\d+)*$))|^(-?\\d+(?:(?:,|\\n)-?\\d+)*$)";
 
-    private static final String[] NO_NUMBERS = {};
+    private static final int[] NO_NUMBERS = {};
 
     /**
      * Entry point where we receive the String numbers and we return the number sum.
@@ -31,9 +31,7 @@ public class StringCalculator {
      */
     public int add(String entryNumbers) throws NegativeNumberException {
         calcCustomDelimiters(entryNumbers);
-        List<String> numbersList = Stream.of(getNumbers(entryNumbers)).filter(x -> !x.isEmpty()).collect(Collectors.toList());
-        String[] numbers = numbersList.toArray(new String[numbersList.size()]);
-        return numbers.length == 0 ? 0 : sumNumbers(Stream.of(numbers).mapToInt(Integer::parseInt).toArray());
+        return sumNumbers(getNumbers(entryNumbers));
     }
 
     /**
@@ -42,11 +40,11 @@ public class StringCalculator {
      * @param number
      * @return
      */
-    private String[] getNumbers(final String number) {
+    private int[] getNumbers(final String number) {
         Matcher matcher = Pattern.compile(defaultPattern).matcher(number);
         if (matcher.find()) {
             String finalNumber = matcher.group(hasCustomDelimiters(number) ? 1 : 0);
-            return finalNumber.split(defaultSplit);
+            return Stream.of(finalNumber.split(defaultSplit)).filter(x -> !x.isEmpty()).mapToInt(Integer::parseInt).toArray();
         }
         return NO_NUMBERS;
     }
