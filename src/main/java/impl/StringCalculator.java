@@ -1,5 +1,7 @@
 package impl;
 
+import impl.exceptions.NegativeNumberException;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class StringCalculator {
      *
      * @param entryNumbers
      * @return
-     * @throws NegativeNumberException
+     * @throws impl.exceptions.NegativeNumberException
      */
     public int add(String entryNumbers) throws NegativeNumberException {
         calcCustomDelimiters(entryNumbers);

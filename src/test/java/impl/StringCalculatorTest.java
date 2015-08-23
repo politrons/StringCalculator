@@ -1,5 +1,6 @@
 package impl;
 
+import impl.exceptions.NegativeNumberException;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -8,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
+ * This Unit test will try to cover all possible scenarios for the inputs, and sum of those of String calculator
  * @author Pablo Perez Garcia
  */
 public class StringCalculatorTest {
@@ -19,7 +21,6 @@ public class StringCalculatorTest {
         int number = stringCalculator.add("");
         assertThat(number, is(0));
     }
-
 
     @Test
     public void oneNumberComaSeparationReturn1() throws NegativeNumberException {

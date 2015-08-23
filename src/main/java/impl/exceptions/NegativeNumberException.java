@@ -1,4 +1,4 @@
-package impl;
+package impl.exceptions;
 
 public class NegativeNumberException extends Exception{
 
