@@ -74,7 +74,7 @@ public class StringCalculator {
      *
      * @param number
      */
-    public void calcCustomDelimiters(String number) {
+    private void calcCustomDelimiters(String number) {
         StringBuilder customDelimiters = new StringBuilder("[");
         StringBuilder customSplit = new StringBuilder();
         boolean delimitersFound = false;
