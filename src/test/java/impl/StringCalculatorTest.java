@@ -20,12 +20,6 @@ public class StringCalculatorTest {
         assertThat(number, is(0));
     }
 
-        @Test
-    public void treeNumbersComaSeparationReturn6() throws NegativeNumberException {
-        impl.StringCalculator stringCalculator = new impl.StringCalculator();
-        int number = stringCalculator.add("1,2,3");
-        assertThat(number, is(6));
-    }
 
     @Test
     public void oneNumberComaSeparationReturn1() throws NegativeNumberException {
@@ -42,9 +36,23 @@ public class StringCalculatorTest {
     }
 
     @Test
+    public void fiveNumbersComaSeparationReturn15() throws NegativeNumberException {
+        impl.StringCalculator stringCalculator = new impl.StringCalculator();
+        int number = stringCalculator.add("1,2,3,4,5");
+        assertThat(number, is(15));
+    }
+
+    @Test
     public void twoNumbersComaAndNewLineSeparationReturn6() throws NegativeNumberException {
         impl.StringCalculator stringCalculator = new impl.StringCalculator();
         int number = stringCalculator.add("1\n2,3");
+        assertThat(number, is(6));
+    }
+
+    @Test
+    public void threeNumbersWithOneCustomDelimitersSeparationReturn6() throws NegativeNumberException {
+        impl.StringCalculator stringCalculator = new impl.StringCalculator();
+        int number = stringCalculator.add("//[%]\n1%2%3");
         assertThat(number, is(6));
     }
 
@@ -69,10 +77,25 @@ public class StringCalculatorTest {
         assertThat(number, is(0));
     }
 
+
+    @Test
+    public void threeNumbersWithOneCustomDelimiterWithoutBracketsSeparationReturn6() throws NegativeNumberException {
+        impl.StringCalculator stringCalculator = new impl.StringCalculator();
+        int number = stringCalculator.add("//%\n1%2%3");
+        assertThat(number, is(6));
+    }
+
     @Test
     public void oneNumbersWithWrongEndingReturn0() throws NegativeNumberException {
         impl.StringCalculator stringCalculator = new impl.StringCalculator();
-        int number = stringCalculator.add("1,\\n");
+        int number = stringCalculator.add("1,\n");
+        assertThat(number, is(0));
+    }
+
+    @Test
+    public void threeNumbersWithWrongSeparationsReturn0() throws NegativeNumberException {
+        impl.StringCalculator stringCalculator = new impl.StringCalculator();
+        int number = stringCalculator.add("1,\n2,3");
         assertThat(number, is(0));
     }
 
