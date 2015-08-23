@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * This Unit test will try to cover all possible scenarios for the inputs, and sum of those of String calculator
+ *
  * @author Pablo Perez Garcia
  */
 public class StringCalculatorTest {
@@ -71,7 +72,7 @@ public class StringCalculatorTest {
         assertThat(number, is(5));
     }
 
-        @Test
+    @Test
     public void fourNumbersWithTwoCustomDelimitersSeparationAndOneNotDefinedReturn0() throws NegativeNumberException {
         impl.StringCalculator stringCalculator = new impl.StringCalculator();
         int number = stringCalculator.add("//[*][%]\n1*2%3&4");
@@ -103,7 +104,7 @@ public class StringCalculatorTest {
     @Test
     public void sumOnlyLowerThan1000Numbers() throws NegativeNumberException {
         impl.StringCalculator stringCalculator = new impl.StringCalculator();
-        int number = stringCalculator.add("1,2,3,1003\n1002,1000");
+        int number = stringCalculator.add("1,2,3,1003,1002,1000");
         assertThat(number, is(1006));
     }
 
@@ -111,10 +112,24 @@ public class StringCalculatorTest {
     public void exceptionNumbersLowerThan0() {
         impl.StringCalculator stringCalculator = new impl.StringCalculator();
         try {
-            stringCalculator.add("1, -2, 3, 1003, 1002\n-1000");
+            stringCalculator.add("1,-2,3,1003,1002,-1000");
         } catch (NegativeNumberException e) {
             assertTrue(e.getMessage().equals("Negatives not allowed [-2, -1000]"));
+            return;
         }
+        assertTrue(false);
+    }
+
+    @Test
+    public void exceptionWithCustomDelimitersSeparationNumberLowerThan0() throws NegativeNumberException {
+        try {
+            impl.StringCalculator stringCalculator = new impl.StringCalculator();
+            stringCalculator.add("//%\n1%-2%3");
+        } catch (NegativeNumberException e) {
+            assertTrue(e.getMessage().equals("Negatives not allowed [-2]"));
+            return;
+        }
+        assertTrue(false);
     }
 
 

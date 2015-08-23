@@ -2,8 +2,6 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/src/main/java/impl/exceptions/NegativeNumberException.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/impl/exceptions/NoEnoughMoneyException.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/impl/exceptions/NoProductAvailableException.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/test/java/impl/StringCalculatorTest.java" charset="UTF-8" />
   </component>
 </project>

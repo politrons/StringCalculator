@@ -18,7 +18,7 @@ public class StringCalculator {
 
     private String defaultSplit = "\\,|\\n";
 
-    private String defaultPattern = "^(?:\\/\\/(.)*\\n(\\d+(?:(?:,|\\n)\\d+)*$))|^(\\d+(?:(?:,|\\n)\\d+)*$)";
+    private String defaultPattern = "^(?:\\/\\/(.)*\\n(-?\\d+(?:(?:,|\\n)-?\\d+)*$))|^(-?\\d+(?:(?:,|\\n)-?\\d+)*$)";
 
     private static final String[] NO_NUMBERS = {};
 
@@ -83,7 +83,7 @@ public class StringCalculator {
         customDelimiters.append("]*");
         String delimiters = customDelimiters.toString();
         defaultSplit = customSplit.toString();
-        defaultPattern = "^(?:\\/\\/(?:.)*\\n(\\d+(?:" + delimiters + "+\\d+)*$))|^(\\d+(?:" + delimiters + "+\\d+)*$)";
+        defaultPattern = "^(?:\\/\\/(?:.)*\\n(-?\\d+(?:" + delimiters + "+-?\\d+)*$))|^(-?\\d+(?:" + delimiters + "+-?\\d+)*$)";
     }
 
     /**
@@ -104,10 +104,11 @@ public class StringCalculator {
      * @return
      */
     private int sumNumbers(int[] numbers) throws NegativeNumberException {
-        int[] negativeNumbers = IntStream.of(numbers).filter(n -> n < 0).toArray();
-        if (negativeNumbers.length > 0) {
-            throw new NegativeNumberException(String.format("Negatives not allowed %s", Arrays.toString(negativeNumbers)));
-        }
-        return IntStream.of(numbers).filter(n -> n <= 1000).sum();
+        return IntStream.of(numbers)
+                        .peek(n -> {
+                            if (n < 0) throw new NegativeNumberException(String.format("Negatives not allowed %s",
+                                    Arrays.toString(IntStream.of(numbers).filter(k -> k < 0).toArray())));
+                        })
+                .filter(n -> n <= 1000).sum();
     }
 }
