@@ -102,17 +102,15 @@ public class StringCalculatorTest {
     @Test
     public void sumOnlyLowerThan1000Numbers() throws NegativeNumberException {
         impl.StringCalculator stringCalculator = new impl.StringCalculator();
-        int[] numbers = {1, 2, 3, 1003, 1002, 1000};
-        int number = stringCalculator.sumNumbers(numbers);
+        int number = stringCalculator.add("1,2,3,1003\n1002,1000");
         assertThat(number, is(1006));
     }
 
     @Test
     public void exceptionNumbersLowerThan0() {
         impl.StringCalculator stringCalculator = new impl.StringCalculator();
-        int[] numbers = {1, -2, 3, 1003, 1002, -1000};
         try {
-            stringCalculator.sumNumbers(numbers);
+            stringCalculator.add("1, -2, 3, 1003, 1002\n-1000");
         } catch (NegativeNumberException e) {
             assertTrue(e.getMessage().equals("Negatives not allowed [-2, -1000]"));
         }

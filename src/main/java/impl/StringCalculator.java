@@ -16,7 +16,7 @@ public class StringCalculator {
 
     private String defaultSplit = "\\,|\\n";
 
-    private String pattern = "^(?:\\/\\/(.)*\\n(\\d+(?:(?:,|\\n)\\d+)*$))|^(\\d+(?:(?:,|\\n)\\d+)*$)";
+    private String defaultPattern = "^(?:\\/\\/(.)*\\n(\\d+(?:(?:,|\\n)\\d+)*$))|^(\\d+(?:(?:,|\\n)\\d+)*$)";
 
     private static final String[] NO_NUMBERS = {};
 
@@ -35,13 +35,13 @@ public class StringCalculator {
     }
 
     /**
-     * Using regex we match the number string and in case the string match the pattern we use the defaultSplit to return the array of numbers
+     * Using regex we match the number string and in case the string match the defaultPattern we use the defaultSplit to return the array of numbers
      *
      * @param number
      * @return
      */
     private String[] getNumbers(final String number) {
-        Matcher matcher = Pattern.compile(pattern).matcher(number);
+        Matcher matcher = Pattern.compile(defaultPattern).matcher(number);
         if (matcher.find()) {
             String finalNumber = matcher.group(hasCustomDelimiters(number) ? 1 : 0);
             return finalNumber.split(defaultSplit);
@@ -71,16 +71,24 @@ public class StringCalculator {
                 separation = "|";
             }
             if (delimitersFound) {
-                customDelimiters.append("]*");
-                String delimiters = customDelimiters.toString();
-                defaultSplit = customSplit.toString();
-                this.pattern = "^(?:\\/\\/(?:.)*\\n(\\d+(?:" + delimiters + "+\\d+)*$))|^(\\d+(?:" + delimiters + "+\\d+)*$)";
+                updateDefaultSplitAndPattern(customDelimiters, customSplit);
                 return;
             }
         }
     }
 
+    private void updateDefaultSplitAndPattern(final StringBuilder customDelimiters, final StringBuilder customSplit) {
+        customDelimiters.append("]*");
+        String delimiters = customDelimiters.toString();
+        defaultSplit = customSplit.toString();
+        defaultPattern = "^(?:\\/\\/(?:.)*\\n(\\d+(?:" + delimiters + "+\\d+)*$))|^(\\d+(?:" + delimiters + "+\\d+)*$)";
+    }
 
+    /**
+     * Check if number has custom delimiters
+     * @param number
+     * @return
+     */
     private boolean hasCustomDelimiters(final String number) {
         return Pattern.compile("\\[(.*?)\\]").matcher(number).find() ||
                 Pattern.compile("^\\/\\/(.*?)\\n").matcher(number).find();
@@ -93,7 +101,7 @@ public class StringCalculator {
      * @param numbers
      * @return
      */
-    public int sumNumbers(int[] numbers) throws NegativeNumberException {
+    private int sumNumbers(int[] numbers) throws NegativeNumberException {
         int[] negativeNumbers = IntStream.of(numbers).filter(n -> n < 0).toArray();
         if (negativeNumbers.length > 0) {
             throw new NegativeNumberException(String.format("Negatives not allowed %s", Arrays.toString(negativeNumbers)));
