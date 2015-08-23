@@ -56,13 +56,13 @@ public class StringCalculator {
     /**
      * Using regex we match the number string and in case the string match the defaultPattern we use the defaultSplit to return the array of numbers
      *
-     * @param number
+     * @param numbers
      * @return
      */
-    private int[] getNumbers(final String number) {
-        Matcher matcher = Pattern.compile(defaultPattern).matcher(number);
+    private int[] getNumbers(String numbers) {
+        Matcher matcher = Pattern.compile(defaultPattern).matcher(numbers);
         if (matcher.find()) {
-            String numbers = matcher.group(hasCustomDelimiters(number) ? 1 : 0);
+            numbers = matcher.group(hasCustomDelimiters(numbers) ? 1 : 0);
             return Stream.of(numbers.split(defaultSplit)).filter(x -> !x.isEmpty()).mapToInt(Integer::parseInt).toArray();
         }
         return NO_NUMBERS;
