@@ -33,7 +33,24 @@ public class StringCalculator {
      */
     public int add(String entryNumbers) throws NegativeNumberException {
         calcCustomDelimiters(entryNumbers);
-        return sumNumbers(getNumbers(entryNumbers));
+        return sumNumbers(entryNumbers);
+    }
+
+
+    /**
+     * Using Stream first we check if there´s any negative number, and if it so we will throw an exception with negative numbers
+     * Also if there´s no negative numbers, we sum all element of the array with the filter that element must not be higher than 1000
+     *
+     * @param entryNumbers
+     * @return
+     */
+    private int sumNumbers(String entryNumbers) throws NegativeNumberException {
+        int[] numbers;
+        return IntStream.of(numbers = getNumbers(entryNumbers))
+                .peek(n -> {
+                    if (n < 0) throw new NegativeNumberException(String.format("Negatives not allowed %s",
+                            Arrays.toString(IntStream.of(numbers).filter(k -> k < 0).toArray())));
+                }).filter(n -> n <= 1000).sum();
     }
 
     /**
@@ -45,8 +62,8 @@ public class StringCalculator {
     private int[] getNumbers(final String number) {
         Matcher matcher = Pattern.compile(defaultPattern).matcher(number);
         if (matcher.find()) {
-            String finalNumber = matcher.group(hasCustomDelimiters(number) ? 1 : 0);
-            return Stream.of(finalNumber.split(defaultSplit)).filter(x -> !x.isEmpty()).mapToInt(Integer::parseInt).toArray();
+            String numbers = matcher.group(hasCustomDelimiters(number) ? 1 : 0);
+            return Stream.of(numbers.split(defaultSplit)).filter(x -> !x.isEmpty()).mapToInt(Integer::parseInt).toArray();
         }
         return NO_NUMBERS;
     }
@@ -62,8 +79,7 @@ public class StringCalculator {
         StringBuilder customSplit = new StringBuilder();
         boolean delimitersFound = false;
         String separation = "";
-        LinkedList<String> delimitersPatterns = new LinkedList<>(Arrays.asList(MULTI_DELIMITER, SINGLE_DELIMITER));
-        for (String delimiterPattern : delimitersPatterns) {
+        for (String delimiterPattern : new LinkedList<>(Arrays.asList(MULTI_DELIMITER, SINGLE_DELIMITER))) {
             Matcher matcher = Pattern.compile(delimiterPattern).matcher(number);
             while (matcher.find()) {
                 delimitersFound = true;
@@ -73,6 +89,7 @@ public class StringCalculator {
                 separation = "|";
             }
             if (delimitersFound) {
+                customDelimiters.append("]*");
                 updateDefaultSplitAndPattern(customDelimiters, customSplit);
                 return;
             }
@@ -80,7 +97,6 @@ public class StringCalculator {
     }
 
     private void updateDefaultSplitAndPattern(final StringBuilder customDelimiters, final StringBuilder customSplit) {
-        customDelimiters.append("]*");
         String delimiters = customDelimiters.toString();
         defaultSplit = customSplit.toString();
         defaultPattern = "^(?:\\/\\/(?:.)*\\n(-?\\d+(?:" + delimiters + "+-?\\d+)*$))|^(-?\\d+(?:" + delimiters + "+-?\\d+)*$)";
@@ -88,6 +104,7 @@ public class StringCalculator {
 
     /**
      * Check if number has custom delimiters
+     *
      * @param number
      * @return
      */
@@ -96,19 +113,4 @@ public class StringCalculator {
                 Pattern.compile("^\\/\\/(.*?)\\n").matcher(number).find();
     }
 
-    /**
-     * Using Stream first we check if there´s any negative number, and if it so we will throw an exception with negative numbers
-     * Also if there´s no negative numbers, we sum all element of the array with the filter that element must not be higher than 1000
-     *
-     * @param numbers
-     * @return
-     */
-    private int sumNumbers(int[] numbers) throws NegativeNumberException {
-        return IntStream.of(numbers)
-                        .peek(n -> {
-                            if (n < 0) throw new NegativeNumberException(String.format("Negatives not allowed %s",
-                                    Arrays.toString(IntStream.of(numbers).filter(k -> k < 0).toArray())));
-                        })
-                .filter(n -> n <= 1000).sum();
-    }
 }
