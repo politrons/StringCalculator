@@ -35,7 +35,6 @@ public class StringCalculator {
         return sumNumbers(entryNumbers);
     }
 
-
     /**
      * Using Stream first we check if there´s any negative number, and if it so we will throw an exception with negative numbers
      * Also if there´s no negative numbers, we sum all element of the array with the filter that element must not be higher than 1000
@@ -82,7 +81,7 @@ public class StringCalculator {
             while (matcher.find()) {
                 delimitersFound = true;
                 customDelimiters.append(matcher.group(1));
-                customSplit.append(matcher.group(1).replaceAll("^(.)+$", "$1"));
+                customSplit.append(matcher.group(1));
             }
             if (delimitersFound) {
                 customDelimiters.append("]*");
