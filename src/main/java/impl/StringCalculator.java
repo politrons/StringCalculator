@@ -31,7 +31,7 @@ public class StringCalculator {
      * @throws impl.exceptions.NegativeNumberException
      */
     public int add(String entryNumbers) throws NegativeNumberException {
-        calcCustomDelimiters(entryNumbers);
+        if (hasCustomDelimiters(entryNumbers)) calcCustomDelimiters(entryNumbers);
         return sumNumbers(entryNumbers);
     }
 
@@ -75,21 +75,16 @@ public class StringCalculator {
     private void calcCustomDelimiters(String number) {
         StringBuilder customDelimiters = new StringBuilder("[");
         StringBuilder customSplit = new StringBuilder("[");
-        boolean delimitersFound = false;
         for (String delimiterPattern : new LinkedList<>(Arrays.asList(MULTI_DELIMITER, SINGLE_DELIMITER))) {
             Matcher matcher = Pattern.compile(delimiterPattern).matcher(number);
             while (matcher.find()) {
-                delimitersFound = true;
                 customDelimiters.append(matcher.group(1));
                 customSplit.append(matcher.group(1));
             }
-            if (delimitersFound) {
-                customDelimiters.append("]*");
-                customSplit.append("]+");
-                updateDefaultSplitAndPattern(customDelimiters, customSplit);
-                return;
-            }
         }
+        customDelimiters.append("]*");
+        customSplit.append("]+");
+        updateDefaultSplitAndPattern(customDelimiters, customSplit);
     }
 
     private void updateDefaultSplitAndPattern(final StringBuilder customDelimiters, final StringBuilder customSplit) {
