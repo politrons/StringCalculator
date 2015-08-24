@@ -99,8 +99,8 @@ public class StringCalculator {
      * @return
      */
     private boolean hasCustomDelimiters(final String number) {
-        return Pattern.compile("\\[(.*?)\\]").matcher(number).find() ||
-                Pattern.compile("^\\/\\/(.*?)\\n").matcher(number).find();
+        return Pattern.compile(MULTI_DELIMITER).matcher(number).find() ||
+                Pattern.compile(SINGLE_DELIMITER).matcher(number).find();
     }
 
 }
