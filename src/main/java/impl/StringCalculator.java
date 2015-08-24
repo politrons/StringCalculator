@@ -15,14 +15,13 @@ import java.util.stream.Stream;
 public class StringCalculator {
 
     public static final String MULTI_DELIMITER = "\\[(.*?)\\]";
-
     public static final String SINGLE_DELIMITER = "^\\/\\/(.*?)\\n";
+    public static final String CUSTOM_PATTERN = "^(?:\\/\\/(?:.)*\\n(-?\\d+(?:delimiter+-?\\d+)*$))|^(-?\\d+(?:delimiter+-?\\d+)*$)";
+    public static final String DELIMITER = "delimiter";
+    private static final int[] NO_NUMBERS = {};
 
     private String defaultSplit = "\\,|\\n";
-
     private String defaultPattern = "^(?:\\/\\/(.)*\\n(-?\\d+(?:(?:,|\\n)-?\\d+)*$))|^(-?\\d+(?:(?:,|\\n)-?\\d+)*$)";
-
-    private static final int[] NO_NUMBERS = {};
 
     /**
      * Entry point where we receive the String numbers and we return the number sum.
@@ -97,9 +96,8 @@ public class StringCalculator {
     }
 
     private void updateDefaultSplitAndPattern(final StringBuilder customDelimiters, final StringBuilder customSplit) {
-        String delimiters = customDelimiters.toString();
         defaultSplit = customSplit.toString();
-        defaultPattern = "^(?:\\/\\/(?:.)*\\n(-?\\d+(?:" + delimiters + "+-?\\d+)*$))|^(-?\\d+(?:" + delimiters + "+-?\\d+)*$)";
+        defaultPattern = CUSTOM_PATTERN.replace(DELIMITER, customDelimiters.toString());
     }
 
     /**
