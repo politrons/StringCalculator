@@ -62,7 +62,7 @@ public class StringCalculator {
         Matcher matcher = Pattern.compile(defaultPattern).matcher(numbers);
         if (matcher.find()) {
             numbers = matcher.group(hasCustomDelimiters(numbers) ? 1 : 0);
-            return Stream.of(numbers.split(defaultSplit)).filter(x -> !x.isEmpty()).mapToInt(Integer::parseInt).toArray();
+            return Stream.of(numbers.split(defaultSplit)).mapToInt(Integer::parseInt).toArray();
         }
         return NO_NUMBERS;
     }
@@ -75,20 +75,18 @@ public class StringCalculator {
      */
     private void calcCustomDelimiters(String number) {
         StringBuilder customDelimiters = new StringBuilder("[");
-        StringBuilder customSplit = new StringBuilder();
+        StringBuilder customSplit = new StringBuilder("[");
         boolean delimitersFound = false;
-        String separation = "";
         for (String delimiterPattern : new LinkedList<>(Arrays.asList(MULTI_DELIMITER, SINGLE_DELIMITER))) {
             Matcher matcher = Pattern.compile(delimiterPattern).matcher(number);
             while (matcher.find()) {
                 delimitersFound = true;
                 customDelimiters.append(matcher.group(1));
-                customSplit.append(separation);
-                customSplit.append("\\").append(matcher.group(1).replaceAll("^(.)+$", "$1"));
-                separation = "|";
+                customSplit.append(matcher.group(1).replaceAll("^(.)+$", "$1"));
             }
             if (delimitersFound) {
                 customDelimiters.append("]*");
+                customSplit.append("]+");
                 updateDefaultSplitAndPattern(customDelimiters, customSplit);
                 return;
             }
